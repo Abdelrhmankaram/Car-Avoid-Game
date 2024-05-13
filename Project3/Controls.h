@@ -34,23 +34,7 @@ void mouseClick(int button, int state, int x, int y) {
 
 void keyboard(unsigned char key, int x, int y)
 {
-	if (key == 'n')
-	{
-		sky_red = 0;
-		sky_green = 0.2;
-		sky_blue = 0.25;
-
-	}
-
-	else if (key == 'd')
-	{
-		sky_red = 0;
-		sky_green = 0.8;
-		sky_blue = 1.0;
-
-	}
-
-	else if (key == 27)
+	if (key == 27)
 	{
 		exit(1);
 	}

@@ -25,8 +25,7 @@ void RenderToDisplay()
 		glTranslatef(-(lenghOfQuote * 37), (l * 200), 0.0);
 		for (i = 0; i < lenghOfQuote; i++)
 		{
-			glColor3f((UpwardsScrollVelocity / 10) + 300 + (l * 10), (UpwardsScrollVelocity / 10) + 300 + (l * 10), 0.0);
-			glutStrokeCharacter(GLUT_STROKE_ROMAN, quote[l][i]);  //Font
+			glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN, quote[l][i]);  //Font
 		}
 		glPopMatrix();
 	}

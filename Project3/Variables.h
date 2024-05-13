@@ -19,13 +19,13 @@ int static score = 0;
 int static totalMeter = 0;
 char quote[6][80];
 int numberOfQuotes = 0, i;
+unsigned char* data1 = NULL;
 
-float static sky_red = 0;
-float static sky_green = .8;
-float static sky_blue = 1.0;
+//float static sky_red = 0;
+//float static sky_green = .8;
+//float static sky_blue = 1.0;
 
 int roadlight = 50;
-void checkImg(unsigned char* imageData);
 float myLightPosition[4] = { 3.0, 6.0, 5.0, 1.0 };
 
 // Declare global variables to store mouse coordinates

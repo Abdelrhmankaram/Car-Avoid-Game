@@ -17,6 +17,7 @@
 #include "Display.h"
 #include "Time.h"
 using namespace std;
+
 bool GameScore()
 {
 	if (0 > (crmove - y11) && -1 < (crmove - y11) && carpos == 0)
@@ -60,7 +61,7 @@ int winner(char a)
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutInitWindowSize(800, 500);
 	glutCreateWindow("GAME OVER");
-	glClearColor(0.0, 0.0, 0.0, 1.0);
+	/*glClearColor(0.0, 0.0, 0.0, 1.0);*/
 	glLineWidth(3);
 	char c = char(score);
 	strcpy_s(quote[1], "Game Over");
@@ -79,7 +80,7 @@ int win(char a)
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutInitWindowSize(800, 500);
 	glutCreateWindow("YOU WIN");
-	glClearColor(0.0, 0.0, 0.0, 1.0);
+	/*glClearColor(0.0, 0.0, 0.0, 1.0);*/
 	glLineWidth(3);
 	char c = char(score);
 	strcpy_s(quote[1], "WINNER WINNER CHICKEN DINNER");
@@ -94,7 +95,7 @@ int win(char a)
 void sprint(float x, float y, string st)
 {
 	int l, i;
-	glColor3f(0.0, 0.0, 0.0);
+	/*glColor3f(0.0, 0.0, 0.0);*/
 	glRasterPos2f(x, y); // location to start printing text
 	for (i = 0; i < st.length(); i++) // loop until i is greater then l
 	{

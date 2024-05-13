@@ -12,8 +12,13 @@
 #include "Lighting.h"
 #include "Settings.h"
 #include "Collision.h"
+#define STB_IMAGE_IMPLEMENTATION
+#define glGenerateMipmaps ;
+#include <gl/stb_image.h>
+#include <gl/GL.h>
 
 using namespace std;
+void check(unsigned char*);
 
 void gamercar()
 {
@@ -88,23 +93,62 @@ void gamercar()
 
 }
 
-void sky()
-{
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glBegin(GL_QUADS);
+void load(int imgnum) {
+	if (imgnum == 1) {
 
-	glColor3ub(0, 0, 1);
-	glVertex3f(-4.0, 1.5, 0);
-	glVertex3f(4.0, 1.5, 0);
-	glVertex3f(8.0, 3, 0);
-	glVertex3f(-8.0, 3, 0);
-	glEnd();
+		data1 = stbi_load("C:\\Users\\bodyk\\Downloads\\sky.jpg", &width, &height, &nrChannels, 0);
+		check(data1);
+	}
+	else if (imgnum == 2) {
+
+		data1 = stbi_load("container.jpg", &width, &height, &nrChannels, 0);
+		check(data1);
+	}
 }
 
+void check(unsigned char* data) {
+	if (data)
+	{
+		glGenTextures(1, &texture);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	}
+	else
+	{
+		std::cout << "Failed to load texture" << std::endl;
+	}
+	stbi_image_free(data);
+}
+
+void sky()
+{
+	load(1);
+
+	glPushMatrix();
+	glRotatef(_cameraAngle, 0.0, 1.0, 0.0); // Rotate the sky to match the camera angle
+
+	glBegin(GL_QUADS);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glColor3ub(255, 255, 255); // Set color to white for the texture
+	glTexCoord2f(0.0, 0.0); glVertex3f(-12.0, 2.0, -8.0); // Bottom left (wider), raised
+	glTexCoord2f(10.0, 0.0); glVertex3f(12.0, 2.0, -8.0); // Bottom right (wider), raised
+	glTexCoord2f(10.0, 5.0); glVertex3f(10.0, 4.0, 8.0);  // Top right, raised
+	glTexCoord2f(0.0, 5.0); glVertex3f(-10.0, 4.0, 8.0); // Top left, raised
+
+	glEnd();
+
+	glPopMatrix();
+}
 
 void roadside()
 {
-	// tree
+	// light pool
 	for (float z = -38; z < 400; z += 4)
 	{
 		glPushMatrix();
@@ -127,25 +171,24 @@ void roadside()
 		//glScalef(2, .2, .2);
 		glutSolidCone(.2, .3, 15, 20); // light cone
 		glPopMatrix();
-
 	}
 
+	// Widened road sides
 	glBegin(GL_QUADS);
 	glColor3ub(0, 155, 20); // left side road
-	glVertex3f(-5.0, -10, 0);
+	glVertex3f(-100.0, -10, 0);
 	glVertex3f(-1.0, -10, 0);
 	glVertex3f(-1.0, 400, 0);
-	glVertex3f(-5.0, 400, 0);
+	glVertex3f(-100.0, 400, 0);
 	glEnd();
 
 	glBegin(GL_QUADS);
 	glColor3ub(0, 155, 20); // right side road
 	glVertex3f(1.0, -10, 0);
-	glVertex3f(5.0, -10, 0);
-	glVertex3f(5.0, 400, 0);
+	glVertex3f(100.0, -10, 0);
+	glVertex3f(100.0, 400, 0);
 	glVertex3f(1.0, 400, 0);
 	glEnd();
-
 }
 
 void objectcube()
@@ -180,7 +223,6 @@ void objectcube()
 	}
 }
 
-
 void road() {
 	for (float z = -10; z < 400; z += 1)
 	{
@@ -213,14 +255,16 @@ void road() {
 
 }
 
-//Draws the 3D scene
 void drawScene() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glRotatef(-_cameraAngle, 0.0, 1.0, 0.0);
+	glTranslatef(0.0, 0.0, -7.0);
 
-	glMatrixMode(GL_MODELVIEW); //Switch to the drawing perspective
-	glLoadIdentity(); //Reset the drawing perspective
-	glRotatef(-_cameraAngle, 0.0, 1.0, 0.0); //Rotate the camera
-	glTranslatef(0.0, 0.0, -7.0); //Move forward 7 units
+	glColor3f(0.0, 0.0, 0.3);
+	// Render the sky first
+	sky();
 	
 	gamercar(); // draw the car
 
@@ -233,7 +277,7 @@ void drawScene() {
 	glPushMatrix();
 	glTranslatef(0.0, crmove, 0.0);
 
-	glClearColor(0.0, 0.0, 0.0, 1.0);
+	/*glClearColor(0.0, 0.0, 0.0, 1.0);*/
 
 	road();
 	
@@ -251,7 +295,7 @@ void drawScene() {
 	glPopMatrix();
 
 	glPushMatrix();
-	glColor3ub(0, 0, 0);
+	/*glColor3ub(0, 0, 0);*/
 	glTranslatef(5.52, 0.0, 2.0);
 
 	ostringstream cnvrt;
@@ -260,7 +304,7 @@ void drawScene() {
 	glPopMatrix();
 
 	glPushMatrix();
-	glColor3ub(0, 0, 0);
+	/*glColor3ub(0, 0, 0);*/
 	glTranslatef(5.5, 0.0, 1.8);
 
 	ostringstream cnvrt2;
@@ -269,7 +313,7 @@ void drawScene() {
 	glPopMatrix();
 
 	glPushMatrix();
-	glColor3ub(0, 0, 0);
+	/*glColor3ub(0, 0, 0);*/
 	glTranslatef(5.5, 0.0, 1.6);
 	ostringstream cnvrt3;
 	cnvrt3 << carspeed; // Car Speed
@@ -277,7 +321,7 @@ void drawScene() {
 	glPopMatrix();
 
 	glPopMatrix();
-	glClearColor(sky_red, sky_green, sky_blue, 1.0);
+	/*glClearColor(sky_red, sky_green, sky_blue, 1.0);*/
 
 	if (collision())
 	{

@@ -139,6 +139,10 @@
     <ClInclude Include="Settings.h" />
     <ClInclude Include="Variables.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\Downloads\sky.jpg" />
+    <Image Include="..\..\..\..\Downloads\grass.jpg" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
